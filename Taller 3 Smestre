@@ -1,0 +1,77 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package biblioteca;
+
+import java.util.ArrayList;
+import javax.swing.*;
+
+/**
+ *
+ * @author sebas
+ */
+public class Library {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        JTextField tituloLibro = new JTextField();
+        JTextField autor = new JTextField();
+        JTextField fecha = new JTextField();
+        JTextField modificarDatos = new JTextField();
+
+        Object[] message = {
+            "Titulo  de la obra", tituloLibro,
+            "Autor de la obra", autor,
+            "Fecha de lanzamiento", fecha};
+
+        boolean seguirActivo = true;
+        Object[] modOpciones = {"No, Si, FInalizar y mostrar opciones"};
+        ArrayList Informacion = new ArrayList();
+
+        Service servicioInfo = new Service();
+        Books libroInfo = new Books();
+
+        do {
+            JOptionPane.showMessageDialog(null, " Bienvenido a la Biblioteca");
+            int confirmarInfo = JOptionPane.showOptionDialog(null, "¿Continuar?", "Confirmación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, modOpciones, modOpciones[0]);
+
+            switch (confirmarInfo) {
+                case 0 -> {
+                    JSONObject  jsonBibliotecaInfo = new JSONObject();
+
+                    JOptionPane.showConfirmDialog(null, message, " INGRESA INFO DE LA BIBLIOTECA", JOptionPane.OK_CANCEL_OPTION);
+                    libroInfo.setTitulo(tituloLibro.getText());
+                    libroInfo.setAutor(autor.getText());
+                    libroInfo.setFecha(fecha.getText());
+
+                    servicioInfo.setModificarDatos(modificarDatos.getText());
+
+                    jsonBibliotecaInfo.put("Titulo del libro", libroInfo.getTitulo());
+                    jsonBibliotecaInfo.put("Autor del Libro", libroInfo.getAutor());
+                    jsonBibliotecaInfo.put("Fecha de lanzamiento del libro", libroInfo.getFecha());
+
+                    jsonBibliotecaInfo.put("Modificar Informacion", servicioInfo.getModificarDatos());
+
+                    Informacion.add(jsonBibliotecaInfo);
+
+                }
+                case 1 ->
+                    seguirActivo = false;
+
+                case 2 -> {
+                    libroInfo.showInfo(Informacion);
+                    seguirActivo = false;
+                }
+                default ->
+                    seguirActivo = false;
+
+            }
+
+        } while (seguirActivo);
+    }
+
+}
+
